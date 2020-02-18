@@ -1,0 +1,17 @@
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.marudharr.magicsales.masters.Retailer_Summary">
+
+
+    <item
+        android:id="@+id/refresh"
+        android:title="view"
+        android:icon="@drawable/view_data"
+        />
+    <item
+        android:id="@+id/mapview"
+        android:title="mapview"
+        android:icon="@drawable/map_icon"
+        />
+</menu>

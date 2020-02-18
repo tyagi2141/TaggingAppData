@@ -109,7 +109,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 											public void onChanged(List<LocationEntity> locationEntities) {
 												for (LocationEntity locationEntity:locationEntities){
 
-													
+
 
 														mMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(locationEntity.getLatitude()),
 																Double.parseDouble(locationEntity.getLongitude()))).title(locationEntity.getAddress())

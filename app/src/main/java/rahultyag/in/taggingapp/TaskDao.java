@@ -18,7 +18,7 @@ public interface TaskDao {
 
 	
 	@Query("SELECT * FROM LocationData WHERE id LIKE :id")
-	List<LocationEntity> getAllArea(int id);
+	LiveData<List<LocationEntity>> getAllArea(int id);
 	
 	
 	@Insert

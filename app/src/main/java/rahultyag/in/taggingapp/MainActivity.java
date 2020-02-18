@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -55,8 +56,8 @@ public class MainActivity extends AppCompatActivity {
 			RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
 			int position = viewHolder.getAdapterPosition();
 			LocationEntity thisItem = mLocationEntities.get(position);
-
-			Toast.makeText(MainActivity.this, "You Clicked: " + thisItem.getAddress(), Toast.LENGTH_SHORT).show();
+startActivity(new Intent(MainActivity.this,MapsActivity.class).putExtra("type",thisItem.id));
+			Toast.makeText(MainActivity.this, thisItem.id+"You Clicked: " + thisItem.getAddress(), Toast.LENGTH_SHORT).show();
 		}
 	};
 }

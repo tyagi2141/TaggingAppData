@@ -71,4 +71,15 @@ private String latitude;
 	public void setLongitude(String longitude) {
 		this.longitude = longitude;
 	}
+
+	@Override
+	public String toString() {
+		return "LocationEntity{" +
+				"id=" + id +
+				", latitude='" + latitude + '\'' +
+				", longitude='" + longitude + '\'' +
+				", images='" + images + '\'' +
+				", address='" + address + '\'' +
+				'}';
+	}
 }

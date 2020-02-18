@@ -47,15 +47,21 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="8dp"
+                    android:textSize="12dp"
                     android:hint="latlng" />
-
+<View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:layout_marginStart="8dp"
+    android:background="@color/grey"/>
                 <TextView
                     android:id="@+id/address_id"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="8dp"
-
+android:textStyle="bold"
+                    android:textColor="@color/black"
                     android:hint="addresss" />
 
             </LinearLayout>

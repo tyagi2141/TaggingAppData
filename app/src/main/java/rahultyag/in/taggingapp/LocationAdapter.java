@@ -22,11 +22,11 @@ import java.util.List;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.MyViewHolder> {
-	
-	private List<LocationEntity> moviesList;
-	Context context;
-	public class MyViewHolder extends RecyclerView.ViewHolder {
-		public TextView title, strAddress, strLatLng;
+	private View.OnClickListener mOnItemClickListener;
+	private List<LocationEntity> mDataList;
+	private Context context;
+	class MyViewHolder extends RecyclerView.ViewHolder {
+		TextView  strAddress, strLatLng;
 		ImageView mphotos;
 		
 		public MyViewHolder(View view) {
@@ -34,12 +34,14 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.MyView
 			mphotos =  view.findViewById(R.id.ImgVw_Letters);
 			strLatLng = (TextView) view.findViewById(R.id.latlng_id);
 			strAddress = (TextView) view.findViewById(R.id.address_id);
+			itemView.setTag(this);
+			itemView.setOnClickListener(mOnItemClickListener);
 		}
 	}
 	
 	
-	public LocationAdapter(List<LocationEntity> moviesList,Context mContext) {
-		this.moviesList = moviesList;
+	LocationAdapter(List<LocationEntity> mDataList, Context mContext) {
+		this.mDataList = mDataList;
 		this.context=mContext;
 	}
 	
@@ -47,15 +49,16 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.MyView
 	public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		View itemView = LayoutInflater.from(parent.getContext())
 				.inflate(R.layout.list_row, parent, false);
-		
+
+
 		return new MyViewHolder(itemView);
 	}
 	
 	@Override
 	public void onBindViewHolder(MyViewHolder holder, int position) {
-		LocationEntity movie = moviesList.get(position);
+		LocationEntity entity = mDataList.get(position);
 	
-		File file = new File(movie.getImages());
+		File file = new File(entity.getImages());
 		Uri imageUri = Uri.fromFile(file);
 	
 		Glide.with(context.getApplicationContext()).asBitmap()
@@ -64,12 +67,15 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.MyView
 				)
 				.skipMemoryCache(true)
 				.into(holder.mphotos);
-		holder.strLatLng.setText(movie.getLatitude()+" || "+movie.getLongitude());
-		holder.strAddress.setText(movie.getAddress());
+		holder.strLatLng.setText(entity.getLatitude()+" || "+entity.getLongitude());
+		holder.strAddress.setText(entity.getAddress());
 	}
 	
 	@Override
 	public int getItemCount() {
-		return moviesList.size();
+		return mDataList.size();
+	}
+	public void setOnItemClickListener(View.OnClickListener itemClickListener) {
+		mOnItemClickListener = itemClickListener;
 	}
 }

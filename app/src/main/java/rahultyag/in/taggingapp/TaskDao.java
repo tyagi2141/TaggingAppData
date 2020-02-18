@@ -2,6 +2,7 @@ package rahultyag.in.taggingapp;
 
 import java.util.List;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
@@ -13,9 +14,8 @@ public interface TaskDao {
 	
 	//Area
 	@Query("SELECT * FROM LocationData")
-	List<LocationEntity> getAllArea();
+	LiveData<List<LocationEntity>> getAllArea();
 
-	
 	
 	@Query("SELECT * FROM LocationData WHERE id LIKE :id")
 	List<LocationEntity> getAllArea(int id);
@@ -29,6 +29,7 @@ public interface TaskDao {
 	
 	@Update
 	void updateArea(LocationEntity area);
-	
 
+	@Query("SELECT COUNT(*) FROM LocationData ORDER BY id ASC LIMIT 1")
+	LiveData<Integer> getCount();
 }

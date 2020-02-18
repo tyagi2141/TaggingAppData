@@ -6,5 +6,6 @@
     <color name="fab2">#f40410</color>
     <color name="fab1">#2e9e08</color>
     <color name="white">#fefffd</color>
-    <color name="grey">#FFFFFF</color>
+    <color name="grey">#60A59999</color>
+    <color name="black">#000000</color>
 </resources>

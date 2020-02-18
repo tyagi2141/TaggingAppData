@@ -6,6 +6,8 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -32,6 +34,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -39,10 +42,13 @@ import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 import java.util.Locale;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -94,32 +100,44 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 					@Override
 					public void accept(Boolean granted) {
 						if (granted) {
-							
-								mMap.setMyLocationEnabled(true);
-								
-								gps = new GPSTracker(MapsActivity.this);
-								
-								if (gps.canGetLocation()) {
-									latitude = gps.getLatitude();
-									longitude = gps.getLongitude();
-									current_longlat = latitude + "||" + longitude;
+							getCount().observe(MapsActivity.this, new Observer<Integer>() {
+								@Override
+								public void onChanged(Integer integer) {
+									if (integer>0){
+										getAllLocation().observe(MapsActivity.this, new Observer<List<LocationEntity>>() {
+											@Override
+											public void onChanged(List<LocationEntity> locationEntities) {
+												for (LocationEntity locationEntity:locationEntities){
+
+													
+
+														mMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(locationEntity.getLatitude()),
+																Double.parseDouble(locationEntity.getLongitude()))).title(locationEntity.getAddress())
+																).setDraggable(true);
+
+														mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Double.parseDouble(locationEntity.getLatitude()),Double.parseDouble(locationEntity.getLongitude())), 17.0f));
+
+
+													Log.e("lbkjfgnbfjbn",locationEntity.getLatitude()+" "+locationEntity.getLongitude()+" "+locationEntity.getAddress());
+												}
+												mMap.getUiSettings().setZoomControlsEnabled(true);
+												mMap.getUiSettings().setCompassEnabled(true);
+												mMap.getUiSettings().setMyLocationButtonEnabled(true);
+												mMap.getUiSettings().setMapToolbarEnabled(true);
+												mMap.getUiSettings().setZoomGesturesEnabled(true);
+												mMap.getUiSettings().setScrollGesturesEnabled(true);
+												mMap.getUiSettings().setTiltGesturesEnabled(true);
+												mMap.getUiSettings().setRotateGesturesEnabled(true);
+												mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+											}
+										});
+									}else {
+										initStep();
+									}
 								}
-								
-								LatLng latLng = new LatLng(latitude, longitude);
-								
-								mMap.addMarker(new MarkerOptions().position(latLng).title(current_longlat)).setDraggable(true);
-								
-								mMap.getUiSettings().setZoomControlsEnabled(true);
-								mMap.getUiSettings().setCompassEnabled(true);
-								mMap.getUiSettings().setMyLocationButtonEnabled(true);
-								mMap.getUiSettings().setMapToolbarEnabled(true);
-								mMap.getUiSettings().setZoomGesturesEnabled(true);
-								mMap.getUiSettings().setScrollGesturesEnabled(true);
-								mMap.getUiSettings().setTiltGesturesEnabled(true);
-								mMap.getUiSettings().setRotateGesturesEnabled(true);
-								mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-								mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17.0f));
-							
+							});
+
+
 							
 						}
 					}
@@ -127,7 +145,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 		
 		
 	}
-	
+	public LiveData<Integer> getCount(){
+	return 	DatabaseClient.getInstance(getApplicationContext()).getAppDatabase()
+				.taskDao()
+				.getCount();
+	}
+
+	public LiveData<List<LocationEntity>> getAllLocation(){
+		return 	DatabaseClient.getInstance(getApplicationContext()).getAppDatabase()
+				.taskDao()
+				.getAllArea();
+	}
 	
 	@Override
 	public void onMapClick(LatLng point) {
@@ -140,7 +168,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 		
 		mMap.clear();
 		String strAddress = null;
-		List<Address> addresses = null;
+		List<Address> addresses;
 		mMap.addMarker(new MarkerOptions().position(new LatLng(point.latitude, point.longitude)).title(String.valueOf(point.latitude) + "," + point.longitude)).setDraggable(true);
 		try {
 			Geocoder geocoder = new Geocoder(this, Locale.getDefault());
@@ -157,7 +185,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 				
 				
 				for (int i = 0; i <= address.getMaxAddressLineIndex(); i++) {
-					//addressFragments.add(address.getAddressLine(i));
 					strAddress = address.getAddressLine(i);
 					Log.e("bjhbvhbfnbf", address.getAddressLine(i));
 				}
@@ -384,43 +411,31 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 		return true;
 	}
 	
-	private void getArea() {
-		class GetTasks extends AsyncTask<Void, Void, List<LocationEntity>> {
-			
-			@Override
-			protected List<LocationEntity> doInBackground(Void... voids) {
-				List<LocationEntity> taskList = DatabaseClient
-						.getInstance(getApplicationContext())
-						.getAppDatabase()
-						.taskDao()
-						.getAllArea();
-				
-				return taskList;
-			}
-			@Override
-			protected void onPostExecute(List<LocationEntity> areas) {
-				super.onPostExecute(areas);
-				Log.e("jdfbvjbjfbfb",areas.toString());
-				
-				for (LocationEntity locationEntity:areas){
-					//mMap.addMarker(new MarkerOptions().position(ne).title(current_longlat)).setDraggable(true);
-					
-					
-				}
-				mMap.getUiSettings().setZoomControlsEnabled(true);
-				mMap.getUiSettings().setCompassEnabled(true);
-				mMap.getUiSettings().setMyLocationButtonEnabled(true);
-				mMap.getUiSettings().setMapToolbarEnabled(true);
-				mMap.getUiSettings().setZoomGesturesEnabled(true);
-				mMap.getUiSettings().setScrollGesturesEnabled(true);
-				mMap.getUiSettings().setTiltGesturesEnabled(true);
-				mMap.getUiSettings().setRotateGesturesEnabled(true);
-				mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-			}
+
+	public  void initStep(){
+		mMap.setMyLocationEnabled(true);
+
+		gps = new GPSTracker(MapsActivity.this);
+
+		if (gps.canGetLocation()) {
+			latitude = gps.getLatitude();
+			longitude = gps.getLongitude();
+			current_longlat = latitude + "||" + longitude;
 		}
-		
-		GetTasks gt = new GetTasks();
-		gt.execute();
+
+		LatLng latLng = new LatLng(latitude, longitude);
+
+		mMap.addMarker(new MarkerOptions().position(latLng).title(current_longlat)).setDraggable(true);
+
+		mMap.getUiSettings().setZoomControlsEnabled(true);
+		mMap.getUiSettings().setCompassEnabled(true);
+		mMap.getUiSettings().setMyLocationButtonEnabled(true);
+		mMap.getUiSettings().setMapToolbarEnabled(true);
+		mMap.getUiSettings().setZoomGesturesEnabled(true);
+		mMap.getUiSettings().setScrollGesturesEnabled(true);
+		mMap.getUiSettings().setTiltGesturesEnabled(true);
+		mMap.getUiSettings().setRotateGesturesEnabled(true);
+		mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+		mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17.0f));
 	}
-	
 }

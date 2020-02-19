@@ -5,21 +5,21 @@
     android:layout_height="wrap_content"
     android:background="@color/grey"
     android:orientation="vertical"
-    android:padding="5dp"
-    android:paddingLeft="4dp"
-    android:paddingTop="4dp"
-    android:paddingRight="4dp"
-    android:paddingBottom="4dp"
+    android:padding="@dimen/padding"
+    android:paddingLeft="@dimen/margin"
+    android:paddingTop="@dimen/margin"
+    android:paddingRight="@dimen/margin"
+    android:paddingBottom="@dimen/margin"
     app:layout_collapseMode="parallax"
     app:layout_collapseParallaxMultiplier="0.5">
 
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardview_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
-        app:cardCornerRadius="8dp"
-        app:cardElevation="15dp">
+        app:cardCornerRadius="@dimen/corner"
+        app:cardElevation="@dimen/elevation">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,14 +29,14 @@
 
             <ImageView
                 android:id="@+id/ImgVw_Letters"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="@dimen/imagesize"
+                android:layout_height="@dimen/imagesize"
                 android:layout_gravity="center"
-                android:padding="10dp"
+                android:padding="@dimen/padding"
                 android:src="@mipmap/ic_launcher" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:orientation="vertical">
@@ -46,23 +46,26 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="8dp"
-                    android:textSize="12dp"
-                    android:hint="latlng" />
-<View
-    android:layout_width="match_parent"
-    android:layout_height="1dp"
-    android:layout_marginStart="8dp"
-    android:background="@color/grey"/>
+                    android:layout_marginStart="@dimen/margin"
+                    android:hint="@string/latlng"
+                    android:textSize="@dimen/textsize"
+                    android:textStyle="bold" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="@dimen/margin"
+                    android:background="@color/grey" />
+
                 <TextView
                     android:id="@+id/address_id"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="8dp"
-android:textStyle="bold"
+                    android:layout_marginStart="@dimen/margin"
+                    android:hint="@string/addresss"
                     android:textColor="@color/black"
-                    android:hint="addresss" />
+                    android:textStyle="bold" />
+
 
             </LinearLayout>
         </LinearLayout>

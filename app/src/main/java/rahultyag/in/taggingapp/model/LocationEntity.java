@@ -1,7 +1,5 @@
-package rahultyag.in.taggingapp;
+package rahultyag.in.taggingapp.model;
 
-import androidx.annotation.NonNull;
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -9,16 +7,11 @@ import androidx.room.PrimaryKey;
 public class LocationEntity {
 	
 	
-	
-	
 	@PrimaryKey(autoGenerate = true)
 	public int id;
 	
-	//@ColumnInfo(name = "lattitude")
-private String latitude;
+	private String latitude;
 	private String longitude;
-	
-	//@ColumnInfo(name = "images")
 	private String images;
 	private String address;
 	
@@ -46,7 +39,6 @@ private String latitude;
 		this.id = id;
 	}
 	
-
 	
 	public String getImages() {
 		return images;
@@ -71,15 +63,6 @@ private String latitude;
 	public void setLongitude(String longitude) {
 		this.longitude = longitude;
 	}
+	
 
-	@Override
-	public String toString() {
-		return "LocationEntity{" +
-				"id=" + id +
-				", latitude='" + latitude + '\'' +
-				", longitude='" + longitude + '\'' +
-				", images='" + images + '\'' +
-				", address='" + address + '\'' +
-				'}';
-	}
 }

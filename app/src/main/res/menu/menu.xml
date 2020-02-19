@@ -9,9 +9,5 @@
         android:title="view"
         android:icon="@drawable/view_data"
         />
-    <item
-        android:id="@+id/mapview"
-        android:title="mapview"
-        android:icon="@drawable/map_icon"
-        />
+
 </menu>

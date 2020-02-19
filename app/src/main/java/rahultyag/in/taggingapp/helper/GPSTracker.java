@@ -1,4 +1,4 @@
-package rahultyag.in.taggingapp;
+package rahultyag.in.taggingapp.helper;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -24,7 +24,7 @@ public class GPSTracker extends Service implements LocationListener {
     
     protected LocationManager locationManager;
     
-    boolean isGPSEnabled = false;
+ public   boolean isGPSEnabled = false;
     
     boolean isNetworkEnabled = false;
     
@@ -78,6 +78,7 @@ public class GPSTracker extends Service implements LocationListener {
 
 
                 if (isNetworkEnabled) {
+                    assert locationManager != null;
                     locationManager.requestLocationUpdates(
                             LocationManager.NETWORK_PROVIDER,
                             MIN_TIME_BW_UPDATES,
